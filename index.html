@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Hello World</title>
+  <!--  <link href="styles/main.css" rel="stylesheet" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="./node_modules/angular/angular.min.js"></script>
+  <script src="./assets/js/app.js"></script>
+  <style>
+    html, body {
+      overflow-y: visible;
+    }
+    .alert{
+      position: fixed;
+      z-index:2;
+      top: 50%;
+      left: 50%;
+      background-color: rgba(0,0,0,0.8);
+      border-radius: 3px;
+      color: white;
+      transform: translate(-50%,-50%);
+    }
+  </style>
+</head>
+
+<body ng-controller="mainController">
+  <div class="container">
+    <h1>房贷计算器</h1>
+    <form class="form-horizontal" name="formHouseLoan">
+      <div class="form-group hide">
+        <label class="col-sm-2 control-label">住房面积:</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input class="form-control" ng-modal="formData.area"/>
+            <div class="input-group-addon">平米</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">年利率:</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input class="form-control" type="number" ng-model="formData.yearRate" min="0" max="100" ng-required name="年利率" required/>
+            <div class="input-group-addon">%</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">贷款额:</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input class="form-control" type="number" ng-model="formData.loan" min="0" ng-required name="贷款额" required/>
+            <div class="input-group-addon">元</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">贷款月数:</label>
+        <div class="col-sm-10">
+          <div class="input-group">
+            <input class="form-control" type="number" ng-model="formData.month" min="1" ng-required name="贷款月数" required/>
+            <div class="input-group-addon">月</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">还息方法:</label>
+        <div class="col-sm-10">
+          <label class="radio-inline">
+            <input type="radio" value="dengEBenXi"  ng-model="formData.method"> 等额本息
+          </label>
+          <label class="radio-inline">
+            <input type="radio" value="dengEBenJin" ng-model="formData.method"> 等额本金
+          </label>
+        </div>
+      </div>
+      <div class="form-group text-center" style="padding-left:15px;padding-right:15px;">
+        <button class="btn btn-success btn-block" ng-disabled="formHouseLoan.$invalid" ng-click="calculate()">计算</button>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">利息总额:</label>
+        <div class="col-sm-10">
+          <p class="form-control-static">{{interestTotal}}</p>
+        </div>
+      </div>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>月份</td>
+          <td>月供额</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="item in data">
+          <td>{{item.month}}</td>
+          <td>{{item.money}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alert" ng-class="{hide: !boolAlertShow}">
+    {{alertMsg}}
+  </div>
+</body>
+
+</html>
